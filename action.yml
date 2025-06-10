@@ -61,6 +61,10 @@ inputs:
     description: "Use Google Vertex AI with OIDC authentication instead of direct Anthropic API"
     required: false
     default: "false"
+  max_turns:
+    description: "Maximum number of conversation turns"
+    required: false
+    default: ""
   use_oauth:
     description: "Use Claude AI OAuth authentication instead of API key (for Claude Max subscribers)"
     required: false
@@ -121,7 +125,7 @@ runs:
     - name: Run Claude Code
       id: claude-code
       if: steps.prepare.outputs.contains_trigger == 'true'
-      uses: grll/claude-code-base-action@9f0fa5eeca1de34e9be1acf05f244e22e4527ca7 # Latest commit from fork
+      uses: grll/claude-code-base-action@79b8cfc932eb13806c23905842145e6f05c89e2e # Latest commit from fork
       with:
         prompt_file: ${{ runner.temp }}/claude-prompts/claude-prompt.txt
         allowed_tools: ${{ env.ALLOWED_TOOLS }}
@@ -132,6 +136,7 @@ runs:
         use_bedrock: ${{ inputs.use_bedrock }}
         use_vertex: ${{ inputs.use_vertex }}
         use_oauth: ${{ inputs.use_oauth }}
+        max_turns: ${{ inputs.max_turns }}
         anthropic_api_key: ${{ inputs.anthropic_api_key }}
         claude_access_token: ${{ inputs.claude_access_token }}
         claude_refresh_token: ${{ inputs.claude_refresh_token }}
